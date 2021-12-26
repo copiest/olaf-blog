@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react'
+
 import IndexPage from '$pages/index'
 import { MESSAGE } from '$constants'
 

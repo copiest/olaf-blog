@@ -12,7 +12,7 @@ function IndexPage({ posts = [] }: { posts: Post[] }) {
   return (
     <Container>
       <Message />
-      {posts.map((post: any, index: number) => (
+      {posts.map((post, index: number) => (
         <Link href={`/${post.slug.year}/${post.slug.subject}/${post.slug.title}`} key={index}>
           {post.frontMatter.title}
         </Link>

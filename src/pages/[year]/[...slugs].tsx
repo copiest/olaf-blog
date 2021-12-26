@@ -8,7 +8,9 @@ import { getAllPosts, getPost } from '$utils/posts'
 function PostDetail({ post, code }: { post: Post; code: string }) {
   const Component = React.useMemo(() => getMDXComponent(code), [code])
 
-  const { frontMatter: { title, description, thumbnailImg } } = post
+  const {
+    frontMatter: { title, description, thumbnailImg },
+  } = post
 
   return (
     <>
@@ -17,7 +19,7 @@ function PostDetail({ post, code }: { post: Post; code: string }) {
         <meta name="description" content={description} />
         <meta property="og:url" content="https://nowonbun.tistory.com" />
         <meta property="og:image" content={thumbnailImg || ''} />
-      </Head> 
+      </Head>
       <div>{post.frontMatter.title}</div>
       <Component />
     </>
