@@ -1,0 +1,7 @@
+{
+  "extends": ["@copiest/eslint-config-copiest/react"],
+  "rules": {
+    "@typescript-eslint/no-use-before-define": "off"
+  },
+  "plugins": ["jest"]
+}

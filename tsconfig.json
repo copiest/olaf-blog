@@ -1,0 +1,43 @@
+{
+  "compilerOptions": {
+    "checkJs": false,
+    "target": "esnext",
+    "strict": true,
+    "noImplicitAny": true,
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "downlevelIteration": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedLocals": true,
+    "noUncheckedIndexedAccess": true,
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "noEmit": true,
+    "module": "esnext",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "baseUrl": "src/",
+    "types": ["node", "jest", "@testing-library/jest-dom"],
+    "paths": {
+      "#components/*": ["components/*"],
+      "#constants/*": ["constants/*"],
+      "#constants": ["constants/index"],
+      "#contexts/*": ["contexts/*"],
+      "#pages/*": ["pages/*"],
+      "#shared/*": ["components/shared/*"],
+      "#types/*": ["types/*"],
+      "#utils/*": ["utils/*"],
+      "#utils": ["utils/index"],
+      "~/*": ["*"]
+    },
+    "strictPropertyInitialization": false,
+    "useUnknownInCatchVariables": false,
+    "incremental": true
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "exclude": ["**/*.spec.ts", "**/*.test.ts", "node_modules/"]
+}
