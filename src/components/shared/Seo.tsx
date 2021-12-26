@@ -26,7 +26,7 @@ export default function SEO({ seo = {} }: { seo?: Props }) {
       <meta property="og:description" content={config.description} />
       <meta property="og:title" content={config.title} />
       <meta property="og:type" content="website" />
-      {typeof window != null && <meta property="og:url" content={window.location.href} />}
+      {typeof window !== 'undefined' && <meta property="og:url" content={window.location.href} />}
     </Head>
   )
 }
