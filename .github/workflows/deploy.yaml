@@ -1,5 +1,6 @@
 
-name: deploy
+name: CD
+
 on:
   push:
       branches:
