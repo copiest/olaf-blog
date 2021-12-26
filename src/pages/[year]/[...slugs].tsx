@@ -17,7 +17,7 @@ function PostDetail({ post, code }: { post: Post; code: string }) {
       <Head>
         <meta property="og:title" content={title} key="title" />
         <meta name="description" content={description} />
-        <meta property="og:url" content="https://nowonbun.tistory.com" />
+        {typeof window !== 'undefined' && <meta property="og:url" content={window.location.href} />}
         <meta property="og:image" content={thumbnailImg || ''} />
       </Head>
       <div>{post.frontMatter.title}</div>
