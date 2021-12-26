@@ -4,6 +4,7 @@ import Head from 'next/head'
 
 import { Post, Slug } from '$types/post'
 import { getAllPosts, getPost } from '$utils/posts'
+import Seo from '$components/shared/Seo'
 
 function PostDetail({ post, code }: { post: Post; code: string }) {
   const Component = React.useMemo(() => getMDXComponent(code), [code])
@@ -14,6 +15,12 @@ function PostDetail({ post, code }: { post: Post; code: string }) {
 
   return (
     <>
+      <Seo
+        seo={{
+          title,
+          description,
+        }}
+      />
       <Head>
         <meta property="og:title" content={title} key="title" />
         <meta name="description" content={description} />
