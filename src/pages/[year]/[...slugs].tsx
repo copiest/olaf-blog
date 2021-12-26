@@ -1,6 +1,5 @@
 import React from 'react'
 import { getMDXComponent } from 'mdx-bundler/client'
-import Head from 'next/head'
 
 import { Post, Slug } from '$types/post'
 import { getAllPosts, getPost } from '$utils/posts'
@@ -19,14 +18,9 @@ function PostDetail({ post, code }: { post: Post; code: string }) {
         seo={{
           title,
           description,
+          thumbnail: thumbnailImg,
         }}
       />
-      <Head>
-        <meta property="og:title" content={title} key="title" />
-        <meta name="description" content={description} />
-        {typeof window !== 'undefined' && <meta property="og:url" content={window.location.href} />}
-        <meta property="og:image" content={thumbnailImg || ''} />
-      </Head>
       <div>{post.frontMatter.title}</div>
       <Component />
     </>
