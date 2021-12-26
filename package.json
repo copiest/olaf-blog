@@ -47,5 +47,15 @@
     "@emotion/babel-preset-css-prop": "^11.2.0",
     "eslint-plugin-jest": "^25.3.0",
     "eslint-plugin-testing-library": "^5.0.1"
+  },
+  "lint-staged": {
+    "**/*.{ts,tsx}": [
+      "eslint",
+      "git add"
+    ],
+    "**/*.{json,yaml,md}": [
+      "prettier",
+      "git add"
+    ]
   }
 }
