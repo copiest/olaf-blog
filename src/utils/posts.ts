@@ -5,7 +5,7 @@ import glob from 'glob'
 import memoize from 'memoizee'
 import { bundleMDX } from 'mdx-bundler'
 
-import { Post, Slug } from '#types/post'
+import { Post, Slug } from '$types/post'
 
 const POST_DIRECTORY = path.join(process.cwd(), 'posts')
 

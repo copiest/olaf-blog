@@ -1,7 +1,11 @@
 {
+  "root": true,
   "extends": ["@copiest/eslint-config-copiest/react"],
   "rules": {
-    "@typescript-eslint/no-use-before-define": "off"
+      "@typescript-eslint/no-use-before-define": "off"
   },
-  "plugins": ["jest"]
+  "env": {
+      "jest/globals": true
+  },
+  "plugins": ["testing-library", "jest"]
 }

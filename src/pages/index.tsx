@@ -1,19 +1,23 @@
 import Link from 'next/link'
 import { GetStaticProps } from 'next'
+import styled from '@emotion/styled'
 
-import { className } from '#components/shared/styles.css'
-import { Post } from '#types/post'
-import { getAllPosts } from '#utils/posts'
+import { Post } from '$types/post'
+import { getAllPosts } from '$utils/posts'
+import Message from '$shared/Message'
 
-function IndexPage({ posts }: { posts: Post[] }) {
+const Container = styled.div``
+
+function IndexPage({ posts = [] }: { posts: Post[] }) {
   return (
-    <div className={className}>
+    <Container>
+      <Message />
       {posts.map((post: any, index: number) => (
         <Link href={`/${post.slug.year}/${post.slug.subject}/${post.slug.title}`} key={index}>
           {post.frontMatter.title}
         </Link>
       ))}
-    </div>
+    </Container>
   )
 }
 

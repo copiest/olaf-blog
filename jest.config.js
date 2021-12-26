@@ -1,7 +1,8 @@
-const tsConfig = require('./tsconfig.json');
 const { pathsToModuleNameMapper } = require('ts-jest')
 
-const { paths } = tsConfig.compilerOptions;
+const tsConfig = require('./tsconfig.json')
+
+const { paths } = tsConfig.compilerOptions
 
 module.exports = {
   preset: 'ts-jest',
@@ -11,7 +12,7 @@ module.exports = {
     '^.+\\.tsx?$': 'ts-jest',
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
-  moduleDirectories: ['src', "node_modules"],
+  moduleDirectories: ['src', 'node_modules'],
   moduleNameMapper: {
     '.+\\.(css|styl|less|sass|scss)$': 'identity-obj-proxy',
     ...pathsToModuleNameMapper(paths),
@@ -27,4 +28,4 @@ module.exports = {
   testEnvironment: 'jsdom',
   setupFiles: [],
   setupFilesAfterEnv: ['./jest.setup.js'],
-};
+}
