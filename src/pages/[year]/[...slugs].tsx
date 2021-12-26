@@ -1,5 +1,6 @@
 import React from 'react'
 import { getMDXComponent } from 'mdx-bundler/client'
+import Head from 'next/head'
 
 import { Post, Slug } from '$types/post'
 import { getAllPosts, getPost } from '$utils/posts'
@@ -7,8 +8,16 @@ import { getAllPosts, getPost } from '$utils/posts'
 function PostDetail({ post, code }: { post: Post; code: string }) {
   const Component = React.useMemo(() => getMDXComponent(code), [code])
 
+  const { frontMatter: { title, description, thumbnailImg } } = post
+
   return (
     <>
+      <Head>
+        <meta property="og:title" content={title} key="title" />
+        <meta name="description" content={description} />
+        <meta property="og:url" content="https://nowonbun.tistory.com" />
+        <meta property="og:image" content={thumbnailImg || ''} />
+      </Head> 
       <div>{post.frontMatter.title}</div>
       <Component />
     </>
