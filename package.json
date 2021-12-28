@@ -12,7 +12,8 @@
     "lint": "eslint '**/*.{js,ts,tsx}'",
     "lint:fix": "npm run lint --fix",
     "prettier": "prettier '**/*.{json,yaml,md}' --check",
-    "prettier:fix": "prettier '**/*.{json,yaml,md}' --write"
+    "prettier:fix": "prettier '**/*.{json,yaml,md}' --write",
+    "prepare": "husky install"
   },
   "dependencies": {
     "glob": "^7.2.0",
@@ -46,6 +47,16 @@
     "@emotion/babel-plugin": "^11.3.0",
     "@emotion/babel-preset-css-prop": "^11.2.0",
     "eslint-plugin-jest": "^25.3.0",
-    "eslint-plugin-testing-library": "^5.0.1"
+    "eslint-plugin-testing-library": "^5.0.1",
+    "husky": "^7.0.4",
+    "lint-staged": "^12.1.4"
+  },
+  "lint-staged": {
+    "**/*.{js,ts,tsx}": [
+      "eslint"
+    ],
+    "**/*.{json,yaml,md}": [
+      "prettier --check"
+    ]
   }
 }
