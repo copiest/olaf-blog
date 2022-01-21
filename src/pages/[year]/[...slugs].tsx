@@ -3,7 +3,7 @@ import { getMDXComponent } from 'mdx-bundler/client'
 
 import { Post, Slug } from '$types/post'
 import { getAllPosts, getPost } from '$utils/posts'
-import Seo from '$components/shared/Seo'
+import PostSEO from '$components/shared/PostSEO'
 
 function PostDetail({ post, code }: { post: Post; code: string }) {
   const Component = React.useMemo(() => getMDXComponent(code), [code])
@@ -14,13 +14,7 @@ function PostDetail({ post, code }: { post: Post; code: string }) {
 
   return (
     <>
-      <Seo
-        seo={{
-          title,
-          description,
-          thumbnail: thumbnailImg,
-        }}
-      />
+      <PostSEO title={title} description={description} thumbnail={thumbnailImg} />
       <div>{post.frontMatter.title}</div>
       <Component />
     </>

@@ -7,4 +7,4 @@ export default {
   link: {
     linkedIn: 'https://www.linkedin.com/in/%EC%84%9D%EC%A7%84-%EA%B3%A0-a0a5a5128',
   },
-}
+} as const
