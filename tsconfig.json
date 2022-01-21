@@ -25,6 +25,7 @@
     "types": ["node", "jest", "@testing-library/jest-dom", "@emotion/react/types/css-prop"],
     "paths": {
       "$components/*": ["components/*"],
+      "$home/*": ["components/home/*"],
       "$constants/*": ["constants/*"],
       "$constants": ["constants/index"],
       "$contexts/*": ["contexts/*"],

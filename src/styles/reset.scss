@@ -42,3 +42,10 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
+
+a {
+	color: var(--adaptiveGrey900);
+    text-decoration: none; 
+	outline: none
+}
+
