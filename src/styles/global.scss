@@ -1,0 +1,37 @@
+@import './colors.scss';
+
+:root {
+    --adaptiveGrey50: #f9fafb;
+    --adaptiveGrey100: #f2f4f6;
+    --adaptiveGrey200: #e5e8eb;
+    --adaptiveGrey300: #d1d6db;
+    --adaptiveGrey400: #b0b8c1;
+    --adaptiveGrey500: #8b95a1;
+    --adaptiveGrey600: #6b7684;
+    --adaptiveGrey700: #4e5968;
+    --adaptiveGrey800: #333d4b;
+    --adaptiveGrey900: #191f28;
+
+    --bodyBackgroundColor: #f9fafb;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --adaptiveGrey50: #191f28;
+        --adaptiveGrey100: #333d4b;
+        --adaptiveGrey200: #4e5968;
+        --adaptiveGrey300: #6b7684;
+        --adaptiveGrey400: #8b95a1;
+        --adaptiveGrey500: #b0b8c1;
+        --adaptiveGrey600: #d1d6db;
+        --adaptiveGrey700: #e5e8eb;
+        --adaptiveGrey800: #f2f4f6;
+        --adaptiveGrey900: #f9fafb;
+
+        --bodyBackgroundColor: #333d4b;
+    }
+}
+
+html {
+  background-color: var(--bodyBackgroundColor);
+}

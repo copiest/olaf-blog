@@ -34,6 +34,7 @@
       "$utils": ["utils/index"],
       "$types/*": ["types/*"],
       "$types": ["types/index"],
+      "$styles/*": ["styles/*"],
       "~/*": ["*"]
     },
     "strictPropertyInitialization": false,
