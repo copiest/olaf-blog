@@ -17,26 +17,21 @@ function Posts({ posts }: PostsProps) {
     <ul className={cx('container')}>
       {posts.map((post, index: number) => {
         const {
-          frontMatter: { title, thumbnailImg, description, tags, date },
+          frontMatter: { title, thumbnailImg, tags, date },
         } = post
+
+        const formattedTags = tags.join(', ')
 
         return (
           <li className={cx('content')} key={index}>
             <Link href={`/${post.slug.year}/${post.slug.subject}/${post.slug.title}`}>
-              <a href="replace">
-                <div>
-                  <span className={cx('date')}>{date}</span>
-                  <h3 className={cx('title')}>{title}</h3>
-                  <span>{description}</span>
-                  <ul>
-                    {tags.map((tag) => (
-                      <li key={tag}>{tag}</li>
-                    ))}
-                  </ul>
-                </div>
+              <a>
                 <div className={cx('wrap-img')}>
                   <Image src={thumbnailImg} alt={title} />
                 </div>
+                <span className={cx('txt-tags')}>{formattedTags}</span>
+                <h3 className={cx('txt-title')}>{title}</h3>
+                <span className={cx('date')}>{date}</span>
               </a>
             </Link>
           </li>

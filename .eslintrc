@@ -2,7 +2,12 @@
   "root": true,
   "extends": ["@copiest/eslint-config-copiest/react"],
   "rules": {
-      "@typescript-eslint/no-use-before-define": "off"
+      "@typescript-eslint/no-use-before-define": "off",
+      "jsx-a11y/anchor-is-valid": [ "error", {
+        "components": [ "Link" ],
+        "specialLink": [ "hrefLeft", "hrefRight" ],
+        "aspects": [ "invalidHref", "preferButton" ]
+      }]
   },
   "env": {
       "jest/globals": true

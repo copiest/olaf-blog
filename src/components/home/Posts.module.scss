@@ -1,47 +1,62 @@
 @import '$styles/variables.scss';
+@import '$styles/colors.scss';
 
 .container {
-    margin-top: 100px;
+    display: grid;
+    grid-column-gap: 40px;
+    grid-row-gap: 40px;
     padding: $container_side_padding;
+    grid-template-columns: 1fr 1fr 1fr;
 
-    .content {
-        &:not(:last-child) {
-            margin-bottom: 80px;
-    
-            a {
-                display: flex;
-                justify-content: space-between;
+    @media (max-width: 768px) {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    @media (max-width: 500px) {
+        grid-template-columns: 1fr;
+    }
+
+
+    .content {   
+        &:hover {
+            .txt-title {
+                color: $blue500;
+            }
+
+            .wrap-img {
+                box-shadow: rgb(0 0 33 / 7%) 0px 16px 22.4px 4.8px, rgb(0 0 33 / 5%) 0px 3.2px 16px 0px, rgb(0 0 33 / 7%) 0px 0px 1px 0px;
+                transform: translate3D(0, -3%, 0);
+                border-radius: 16px;
             }
         }
-        
+
+        .wrap-img {
+            margin-bottom: 20px;
+            transition: transform 0.2s;
+        }
+
         .date {
             font-size: 15px;
             font-weight: 400;
             line-height: 1.4;
-            color: var(--adaptiveGrey500);
-            margin-bottom: 10px;
+            color: var(--adaptiveGrey500);        
         }
         
-        .title {
+        .txt-title {
             font-size: 24px;
             font-weight: 600;
             line-height: 1.4;
             color: var(--adaptiveGrey800);
             margin-bottom: 10px;
-            transition: all 0.2s ease-in-out 0s;
+            transition: 0.2s ease-in-out;
         }
-        
-        .description {
-            width: 100%;
-            font-size: 17px;
-            font-weight: 300;
-            line-height: 27px;
-            color: var(--adaptiveGrey700);
+
+        .txt-tags {
+            font-size: 15px;
+            font-weight: 400;
+            line-height: 1.4;
+            color: var(--adaptiveGrey500);
             margin-bottom: 10px;
-        }
-        
-        .wrap-img {
-            min-width: 270px;
         }
     }
 }

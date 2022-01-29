@@ -1,19 +1,21 @@
 import { GetStaticProps } from 'next'
-import styled from '@emotion/styled'
+import classnames from 'classnames/bind'
+
+import styles from './Index.module.scss'
 
 import { Post } from '$types/post'
 import { getAllPosts } from '$utils/posts'
 import Message from '$shared/Message'
 import Posts from '$home/Posts'
 
-const Container = styled.div``
+const cx = classnames.bind(styles)
 
 function IndexPage({ posts = [] }: { posts: Post[] }) {
   return (
-    <Container>
+    <div className={cx('container')}>
       <Message />
       <Posts posts={posts} />
-    </Container>
+    </div>
   )
 }
 
