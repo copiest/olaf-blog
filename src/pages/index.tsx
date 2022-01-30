@@ -5,7 +5,6 @@ import styles from './Index.module.scss'
 
 import { Post } from '$types/post'
 import { getAllPosts } from '$utils/posts'
-import Message from '$shared/Message'
 import Posts from '$home/Posts'
 
 const cx = classnames.bind(styles)
@@ -13,7 +12,6 @@ const cx = classnames.bind(styles)
 function IndexPage({ posts = [] }: { posts: Post[] }) {
   return (
     <div className={cx('container')}>
-      <Message />
       <Posts posts={posts} />
     </div>
   )
