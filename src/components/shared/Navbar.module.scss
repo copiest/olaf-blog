@@ -1,21 +1,33 @@
 @import '$styles/variables.scss';
 
-.container {
+.navbar {
     z-index: 1;
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
-    height: 60px;
+    height: 50px;
     background-color: transparent;
     display: flex;
     align-items: center;
     padding: $container_side_padding;
-    
-    // 임시 
-    background-color: #efefef;
+    transition: background-color .2s ease;
+
+    &.scrolled {
+        background-color: var(--bodyBackgroundColor);
+        border-bottom-color: rgba(0,27,55,0.1);
+    }
+
+    img {
+        width: 45px;
+    }
+
+    .progress-bar {
+        position: absolute;
+        bottom: -3px;
+        left: 0;
+    }
 }
 
-.container > img {
-    width: 60px;
-}
+
+
