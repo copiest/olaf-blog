@@ -3,3 +3,11 @@
     left: 50%;
     transform: translateX(-50%);
 }
+
+@mixin ellipsisLine2 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}

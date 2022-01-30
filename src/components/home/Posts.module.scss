@@ -1,5 +1,6 @@
 @import '$styles/variables.scss';
 @import '$styles/colors.scss';
+@import '$styles/mixins.scss';
 
 .container {
     display: grid;
@@ -49,6 +50,8 @@
             color: var(--adaptiveGrey800);
             margin-bottom: 10px;
             transition: 0.2s ease-in-out;
+
+            @include ellipsisLine2;
         }
 
         .txt-tags {
@@ -57,6 +60,8 @@
             line-height: 1.4;
             color: var(--adaptiveGrey500);
             margin-bottom: 10px;
+
+            @include ellipsisLine2;
         }
     }
 }

@@ -11,7 +11,7 @@ export default function PostSEO({ title, summary, thumbnail }: Props) {
     <Head>
       <meta name="subject" content={title} />
       <meta name="title" content={title} />
-      <meta name="summary" content={summary} />
+      <meta name="description" content={summary} />
       <meta name="keywords" content={title} />
       <meta property="og:image" content={thumbnail} />
       <meta property="og:description" content={summary} />
