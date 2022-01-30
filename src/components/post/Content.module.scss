@@ -1,0 +1,31 @@
+@import '$styles/variables.scss';
+
+.wrap-content {
+    padding: $container_side_padding;
+
+    .wrap-title {
+        text-align: center;
+        display: none;
+
+        @media (max-width: 800px) {
+            display: block;
+        }
+
+        .txt-title {
+            font-weight: 600;
+            line-height: 1.4;
+            font-size: 32px;
+            color: var(--adaptiveGrey900);    
+            margin-bottom: 10px;
+        }
+        
+        time {
+            font-weight: 500;
+            line-height: 1.5;
+            font-size: 14px;
+            color: var(--adaptiveGrey800);    
+        }
+    }
+}
+
+
