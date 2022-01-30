@@ -1,6 +1,8 @@
 @import '$styles/variables.scss';
 
 .wrap-content {
+    max-width: 700px;
+    margin: 0 auto;
     padding: $container_side_padding;
 
     .wrap-title {
@@ -48,14 +50,13 @@
         }
     }
 
-    
-
-    p, span, ul {
+    p, span, ul, pre {
         font-weight: 300;
         margin-bottom: 30px;
     }
 
     h2 {
+        padding-top: 10px;
         margin-bottom: 10px;
         font-weight: 400;
         font-size: 22px;
@@ -69,6 +70,24 @@
         font-size: 16px;
         line-height: 1.8;
         color: var(--adaptiveGrey700);  
+    }
+
+    // MDX
+    pre {
+        border-radius: 10px;
+
+        code {
+            font-size: 13px !important;
+    
+            span {
+                margin-bottom: 0px;
+
+                // 불필요한 태그 제거
+                &:nth-last-child(1), &:nth-last-child(2) {
+                    display: none !important;
+                }
+            }
+        }
     }
 }
 

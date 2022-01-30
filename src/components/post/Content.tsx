@@ -3,6 +3,7 @@ import { getMDXComponent } from 'mdx-bundler/client'
 import classNames from 'classnames/bind'
 
 import styles from './Content.module.scss'
+import CodeBlock from './CodeBlock'
 
 interface ContentProps {
   code: string
@@ -21,7 +22,7 @@ function Content({ code, title, date }: ContentProps) {
         <div className={cx('txt-title')}>{title}</div>
         <time>{date}</time>
       </div>
-      <Component />
+      <Component components={{ code: CodeBlock }} />
     </div>
   )
 }
