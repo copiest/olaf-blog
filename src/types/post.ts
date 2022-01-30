@@ -9,7 +9,7 @@ export interface FrontMatter {
   tags: string[]
   published: boolean
   date: string
-  description: string
+  summary: string
   thumbnailImg?: string
   content: string
 }

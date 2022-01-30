@@ -1,0 +1,357 @@
+---
+title: Recoil 입문 (feat. TODO LIST)
+tags:
+  - 리액트
+  - 상태관리
+published: true
+date: '2020.08.09' 
+summary: recoil 을 이용하여 상태관리하는 방법에 대해 학습합니다.
+thumbnailImg: /images/recoil.png
+---
+
+Recoil 은 페이스북에서만든 상태관리 라이브러리이다.
+
+기존의 상태관리의 한계점을 지적하고 이를 리액트스럽게 보완하여 개선점을 찾으려한다.
+
+## 기존 React 상태관리의 한계
+
+- 컴포넌트의 상태는 공통된 상위요소까지 끌어올림으로써 공유될 수 있지만, 이 과정에서 거대한 트리가 다시 렌더링되는 효과를 야기하기도 한다.
+- Context는 단일 값만 저장할 수 있으며, 자체 consumer 를 가지는 여러 값들의 집합을 담을 수는 없다.
+- 이 두가지 특성이 트리의 최상단(state가 존재하는 곳)부터 트리의 잎(state가 사용되는 곳)까지의 코드 분할을 어렵게한다.
+ 
+
+## Recoil 은 어떤점을 개선했나
+
+- 우리는 공유상태(shared state)도 React의 내부상태(local state)처럼 간단한 get/set 인터페이스로 사용할 수 있도록 boilerplate-free API를 제공한다. (필요한 경우 reducers 등으로 캡슐화할 수도 있다.)
+- 우리는 동시성 모드(Concurrent Mode)를 비롯한 다른 새로운 React의 기능들과의 호환 가능성도 갖는다.
+- 상태 정의는 증분 및 분산되므로 코드 분할이 가능하다.
+- 상태를 사용하는 컴포넌트를 수정하지 않고도 상태를 파생된 데이터로 대체할 수 있다.
+- 파생된 데이터를 사용하는 컴포넌트를 수정하지 않고도 파생된 데이터는 동기식과 비동기식 간에 이동할 수 있다.
+- 우리는 탐색을 일급 개념으로 취급할 수 있고 심지어 링크에서 상태 전환을 인코딩할 수도 있다.
+- 역호환성 방식으로 전체 애플리케이션 상태를 유지하는 것은 쉬우므로, 유지된 상태는 애플리케이션 변경에도 살아남을 수 있다.
+ 
+## 설정
+
+```bash
+$ npm install recoil 
+// or yarn add recoil
+```
+
+recoil 상태를 사용하는 컴포넌트는 부모 트리 어딘가에 나타나는 RecoilRoot 가 필요하다.
+
+```js
+import React from 'react';
+import {
+  RecoilRoot,
+} from 'recoil';
+
+function App() {
+  return (
+    <RecoilRoot>
+      <div>Hello Recoil</div>
+    </RecoilRoot>
+  );
+}
+
+export default App
+```
+
+## 주요 개념
+
+### Atom
+
+- Atom은 상태(state)를 나타낸다.
+- Atoms는 어떤 컴포넌트에서나 위치에 상관없이 읽고 쓸 수 있다.
+- atom의 값을 읽는 컴포넌트들은 암묵적으로 atom을 구독한다.
+(atom에 어떤 변화가 생기면 해당 atom 을 구독하는 모든 컴포넌트들이 재 렌더링된다)
+
+```js
+// src/store/todo.js
+
+import { atom } from 'recoil'
+
+export const todosState = atom({
+  key: 'todos', // key 는 전역적으로 유니크해야한다.
+  default: [], // default value
+});
+```
+
+todoState(atom) 는 다음과 같이 사용이 가능하다.
+
+```js
+// src/components/Todo.js
+
+import { useRecoilState, useRecoilValue } from 'recoil'
+
+import { todosState } from '../store/todo'
+
+function Todos() {
+    const [todos, setTodos] = useRecoilState(todosState)
+    /* 
+	 * value 값만 필요하다면 useRecoilValue 를 사용 할 수 있다.
+     * const todos = useRecoilValue(todosState)
+     */
+
+    return (
+        <div>
+            <ul>
+                {todos.map((todo) => {
+                    return <Todo key={todo.id} todo={todo} />
+                })}
+            </ul>
+        </div>
+    )
+}
+
+export default Todos
+```
+
+### Selector
+
+Selector는 파생된 상태(derived state)의 일부를 나타낸다.
+todosState(Todo 리스트 atom) 을 이용하여 파생된 상태 값을 가져온다.
+
+```js
+export const todosCountState = selector({
+    key: 'todosCount',
+    get: ({ get }) => {
+        const todos = get(todosState)
+
+        return todos.length
+    }
+})
+```
+
+```js
+// src/components/Footer.js
+
+import { useRecoilValue } from 'recoil'
+
+import { todosCountState } from '../store/todo'
+
+function Footer() {
+    const todosCount = useRecoilValue(todosCountState)
+
+    return (
+        <div>
+            <div>
+                전체 할 일 수 : {todosCount}
+            </div>
+        </div>
+    )
+}
+
+export default Footer
+```
+
+### 아이템추가 
+
+useSetRecoilState 를 이용하여 atom 값을 업데이트하는 함수를 가져올 수 있다.
+
+```js
+// src/components/Header.js
+
+import { useState } from 'react'
+
+import { useSetRecoilState } from 'recoil'
+import { todosState } from '../store/todo'
+
+function Header() {
+    const [text, setText] = useState('')
+    const setTodos = useSetRecoilState(todosState)
+
+    const handleInput = (e) => {
+        setText(e.target.value)
+    }
+
+    const handleSubmit = () => {
+        if (text === '') {
+            window.alert('할 일 제목을 추가해주세요')
+            return 
+        }
+
+        setTodos((oldTodos) => ([
+            {
+                id: Date.now(),
+                title: text,
+                isDone: false
+            },
+            ...oldTodos,
+        ]))
+    }
+
+    return (
+        <div>
+            <h1>TODOS</h1>
+            <input value={text} onChange={handleInput} />
+            <div>
+                <button onClick={handleSubmit}>할 일 추가</button>
+            </div>
+        </div>
+    )
+}
+
+export default Header
+```
+
+### 리스트 추가
+
+```js
+// src/components/Todo.js
+
+function Todo({ todo }) {
+    const { id, title, isDone } = todo
+
+    return (
+        <li>
+            <input type="checkbox" checked={isDone} />
+            <span>{title}</span>
+            <button>삭제</button>
+        </li>
+    )
+}
+
+export default Todo
+```
+
+```js
+// src/components/Todos.js
+
+import { useRecoilState, useRecoilValue } from 'recoil'
+
+import { todosState } from '../store/todo'
+
+import Header from './Header'
+import Todo from './Todo'
+import Footer from './Footer'
+
+function Todos() {
+    const [todos, setTodos] = useRecoilState(todosState)
+
+    return (
+        <div>
+            <Header />
+            <ul>
+                {todos.map((todo) => {
+                    return <Todo key={todo.id} todo={todo} />
+                })}
+            </ul>
+            <Footer />
+        </div>
+    )
+}
+
+export default Todos
+```
+
+### 필터링 
+세 가지의 필터 타입이 존재한다 (ALL = 전체, DOING = 진행중, DONE = 완료)
+
+```js
+// src/store/todo.js
+
+export const todoFilterState = atom({
+    key: 'todoFilter',
+    default: 'ALL'
+})
+```
+
+```js
+// src/components/Footer.js
+
+import { useRecoilValue, useRecoilState } from 'recoil'
+
+import { todosCountState, todoFilterState } from '../store/todo'
+
+const FILTERS = ['ALL', 'DOING', 'DONE']
+
+function Footer() {
+    const todosCount = useRecoilValue(todosCountState)
+    
+    // 현재 선택된 필터
+    const [currentFilter, setCurrentFilter] = useRecoilState(todoFilterState)
+
+    const handleFilter = (filter) => {
+        setCurrentFilter(filter)
+    }
+
+    return (
+        <div>
+            <div>
+                전체 할 일 수 : {todosCount}
+            </div>
+            <ul>
+                {FILTERS.map((filter) => {
+                    return <li key={filter} 
+                               style={{ fontWeight: filter === currentFilter ? 'bold' : '400' }}
+                               onClick={() => handleFilter(filter)}
+                            >{filter}</li>
+                })}
+            </ul>
+        </div>
+    )
+}
+
+export default Footer
+```
+
+필터링된 요소를 보여주기 위해서는 원본은 유지한 상태로 원본을 바탕으로 새롭게 필터링된 배열이 필요하다.
+
+```js
+// src/store/todo.js
+
+export const filteredTodos = selector({
+    key: 'filteredTodos',
+    get: ({ get }) => {
+        const todos = get(todosState)
+        const filter = get(todoFilterState)
+
+        switch (filter) {
+            case 'ALL': {
+                return todos
+            }
+            case 'DOING': {
+                return todos.filter((todo) => !todo.isDone)
+            }
+            case 'DONE': {
+                return todos.filter((todo) => todo.isDone)
+            }
+            default: {
+                return todos
+            }
+        }
+    }
+})
+```
+
+Todos.js 에서 원본 값 대신 필터링된 리스트로 그릴 수 있도록 변경한다.
+
+```js
+// src/components/Todos.js
+
+import { useRecoilState, useRecoilValue } from 'recoil'
+
+import { todoFilterState } from '../store/todo'
+
+import Header from './Header'
+import Todo from './Todo'
+import Footer from './Footer'
+
+function Todos() {
+    const [todos, setTodos] = useRecoilState(todoFilterState)
+
+    return (
+        <div>
+            <Header />
+            <ul>
+                {todos.map((todo) => {
+                    return <Todo key={todo.id} todo={todo} />
+                })}
+            </ul>
+            <Footer />
+        </div>
+    )
+}
+
+export default Todos
+```

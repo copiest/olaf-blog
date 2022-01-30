@@ -12,12 +12,12 @@ const cx = classNames.bind(styles)
 
 function PostDetail({ post, code }: { post: Post; code: string }) {
   const {
-    frontMatter: { title, description, thumbnailImg, date },
+    frontMatter: { title, summary, thumbnailImg, date },
   } = post
 
   return (
     <article className={cx('article')}>
-      <PostSEO title={title} description={description} thumbnail={thumbnailImg} />
+      <PostSEO title={title} summary={summary} thumbnail={thumbnailImg} />
       <Header title={title} thumbnailImg={thumbnailImg || 'fallback'} date={date} />
       <Content code={code} date={date} title={title} />
     </article>
