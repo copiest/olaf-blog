@@ -7,7 +7,7 @@ import ProgressBar from './ProgressBar'
 
 const cx = classnames.bind(styles)
 
-function Navbar() {
+function Navbar({ showProgressBar = false }: { showProgressBar?: boolean }) {
   const [scrolled, setScrolled] = useState(false)
 
   useEffect(() => {
@@ -27,7 +27,7 @@ function Navbar() {
       <Link href="/">
         <img src="/assets/images/nav_icon.png" alt="" />
       </Link>
-      <ProgressBar className={cx('progress-bar')} />
+      {showProgressBar ? <ProgressBar className={cx('progress-bar')} /> : null}
     </nav>
   )
 }

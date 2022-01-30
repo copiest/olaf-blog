@@ -7,6 +7,7 @@ import { getAllPosts, getPost } from '$utils/posts'
 import PostSEO from '$components/shared/PostSEO'
 import Header from '$components/post/Header'
 import Content from '$components/post/Content'
+import Navbar from '$shared/Navbar'
 
 const cx = classNames.bind(styles)
 
@@ -16,11 +17,14 @@ function PostDetail({ post, code }: { post: Post; code: string }) {
   } = post
 
   return (
-    <article className={cx('article')}>
+    <>
+      <Navbar showProgressBar={true} />
       <PostSEO title={title} summary={summary} thumbnail={thumbnailImg} />
-      <Header title={title} thumbnailImg={thumbnailImg || 'fallback'} date={date} />
-      <Content code={code} date={date} title={title} />
-    </article>
+      <article className={cx('article')}>
+        <Header title={title} thumbnailImg={thumbnailImg || 'fallback'} date={date} />
+        <Content code={code} date={date} title={title} />
+      </article>
+    </>
   )
 }
 
