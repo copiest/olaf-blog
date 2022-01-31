@@ -1,0 +1,24 @@
+@import '$styles/variables.scss';
+
+.wrap-footer {
+    padding-top: 120px;
+    background-color: var(--adaptiveGrey50);
+
+    .wrap-inner {
+        max-width: 700px;
+        margin: 0 auto;
+        padding: $container_side_padding;
+    }
+
+    .txt-title {
+        font-size: 22px;
+        line-height: 1.2;
+        margin-bottom: 40px;
+    }
+
+    .wrap-feed {
+        & li {
+            padding-bottom: 80px;
+        }
+    }
+}

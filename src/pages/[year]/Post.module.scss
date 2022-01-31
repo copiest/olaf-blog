@@ -1,0 +1,7 @@
+@import '$styles/variables.scss';
+
+.article {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: $container_side_padding;
+}

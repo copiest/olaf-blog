@@ -17,13 +17,13 @@ function Content({ code, title, date }: ContentProps) {
   const Component = useMemo(() => getMDXComponent(code), [code])
 
   return (
-    <div className={cx('wrap-content')}>
+    <article className={cx('wrap-content')}>
       <div className={cx('wrap-title')}>
         <div className={cx('txt-title')}>{title}</div>
         <time>{date}</time>
       </div>
       <Component components={{ code: CodeBlock }} />
-    </div>
+    </article>
   )
 }
 

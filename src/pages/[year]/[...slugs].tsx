@@ -1,17 +1,12 @@
-import classNames from 'classnames/bind'
-
-import styles from './Post.module.scss'
-
 import { Post, Slug } from '$types/post'
 import { getAllPosts, getPost } from '$utils/posts'
 import PostSEO from '$components/shared/PostSEO'
 import Header from '$components/post/Header'
 import Content from '$components/post/Content'
 import Navbar from '$shared/Navbar'
+import Footer from '$components/post/Footer'
 
-const cx = classNames.bind(styles)
-
-function PostDetail({ post, code }: { post: Post; code: string }) {
+function PostDetail({ post, code, morePosts }: { post: Post; code: string; morePosts: Post[] }) {
   const {
     frontMatter: { title, summary, thumbnailImg, date },
   } = post
@@ -20,10 +15,9 @@ function PostDetail({ post, code }: { post: Post; code: string }) {
     <>
       <Navbar showProgressBar={true} />
       <PostSEO title={title} summary={summary} thumbnail={thumbnailImg} />
-      <article className={cx('article')}>
-        <Header title={title} thumbnailImg={thumbnailImg || 'fallback'} date={date} />
-        <Content code={code} date={date} title={title} />
-      </article>
+      <Header title={title} thumbnailImg={thumbnailImg || 'fallback'} date={date} />
+      <Content code={code} date={date} title={title} />
+      <Footer morePosts={morePosts} />
     </>
   )
 }
@@ -47,7 +41,7 @@ export const getStaticPaths = async () => {
 }
 
 export const getStaticProps = async ({ params }: { params: { year: string; slugs: string[] } }) => {
-  const { post, code } = await getPost({
+  const { post, code, morePosts } = await getPost({
     year: params.year,
     subject: params.slugs[0],
     title: params.slugs[1],
@@ -57,6 +51,7 @@ export const getStaticProps = async ({ params }: { params: { year: string; slugs
     props: {
       post,
       code,
+      morePosts,
     },
   }
 }

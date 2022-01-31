@@ -57,11 +57,15 @@ async function retreiveAllPosts(): Promise<Post[]> {
 
 export const getAllPosts: () => Promise<Post[]> = memoize(retreiveAllPosts)
 
-export async function getPost(slug: Slug): Promise<{ post: Post; code: string }> {
+export async function getPost(
+  slug: Slug,
+): Promise<{ post: Post; code: string; morePosts: Post[] }> {
   const { year, subject, title } = slug
   const POST_PATH = `${POST_DIRECTORY}/${year}/${subject}/${title}`
 
   const source = fs.readFileSync(path.join(`${POST_PATH}.mdx`), { encoding: 'utf-8' })
+
+  const allPosts = await getAllPosts()
 
   const {
     matter: { data, content },
@@ -70,6 +74,10 @@ export async function getPost(slug: Slug): Promise<{ post: Post; code: string }>
     source,
     cwd: POST_PATH,
   })
+
+  const findIndex = allPosts.findIndex((post) => post.slug.title === title)
+  const prevPost = allPosts[findIndex - 1]
+  const nextPosts = allPosts.slice(findIndex + 1, findIndex + 2)
 
   return {
     post: {
@@ -86,5 +94,6 @@ export async function getPost(slug: Slug): Promise<{ post: Post; code: string }>
       path: POST_PATH,
     },
     code,
+    morePosts: [...(prevPost ? [prevPost] : []), ...nextPosts],
   }
 }
