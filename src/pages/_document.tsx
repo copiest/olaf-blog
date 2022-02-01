@@ -8,6 +8,7 @@ export default class MyDocument extends Document {
       <Html lang="ko">
         <Head>
           <meta charSet="utf-8" />
+          <title>{config.title}</title>
           <meta property="og:title" content={config.title} />
           <meta property="og:image" content={config.thumbnail} />
           <meta id="metaOgUrl" property="og:url" content={config.url} />

@@ -1,0 +1,84 @@
+---
+title: 성능최적화를 위해 - 번들 사이즈 분석
+tags:
+  - 번들사이즈
+  - 성능최적화
+published: true
+date: '2022.02.01' 
+summary: 성능최적화를 위해 필요한 정보를 학습합니다.
+thumbnailImg: /assets/images/thumbnail/성능최적화.jpeg
+---
+
+## 번들사이즈
+
+performance 를 계산하다보면 이유를 알 수 없지만 용량이 큰 파일이 존재 할 때가 있다.     
+js 를 모두 받은 후에 코드가 실행되기 때문에 js 용량이 클 수록 화면은 늦게 노출된다.
+
+![성능최적화 번들사이즈](/assets/images/post/성능최적화_번들사이즈/성능최적화_번들사이즈1.png)
+
+해당 파일이 어떻게 구성되어져 있는지 알아보기 위해 [bundle-analyzer](https://www.npmjs.com/package/webpack-bundle-analyzer) 를 이용하려한다.
+직접 webpack 을 구성하여 사용하거나, next 같이 webpack config 를 조절 할 수 있다면 그대로 사용이 가능하지만 
+만약 CRA (Create React App) 같은것을 사용하고 있다면 [cra-bundle-analyzer](https://www.npmjs.com/package/cra-bundle-analyzer) 와 같은 라이브러리를 추가하여 사용 할 수 있다.    
+    
+bundle-analyzer 를 실행하여 번들 사이즈를 분석해보자
+
+![성능최적화 번들사이즈](/assets/images/post/성능최적화_번들사이즈/성능최적화_번들사이즈2.png)
+
+refractor 라는 라이브러리가 번들 사이즈의 대부분을 차지하고 있는 것을 볼 수 있다.
+해당 라이브러리는 react-syntax-highlighter 라는 라이브러리가 의존성을 가지고 있었다. 
+react-syntax-highlighter 는 블로그 내용을 보여주는 페이지에서만 사용되어지고 있는 라이브러리이므로 
+전체 번들에 포함되는 것보다는 블로그 내용을 보여주는 컴포넌트 번들에 포함되어 필요 할 때만 불러 사용하는 것이 맞다고 생각되었다.
+     
+이럴 때 적용 할 수 있는 것이 [Code Splitting](https://ko.reactjs.org/docs/code-splitting.html) 이다.    
+Code Splitting 이란 불필요한 코드, 중복되는 코드 없이 코드를 작게 분할하여 번들사이즈를 줄이는 것을 의미한다. 페이지별로 또는 모듈별로 청크를 쪼개는 것이 가능하다.
+사용 예시로는 특정 페이지에 접속 했을 때 전체 번들 파일을 로드하는 것이 아니라, 접속한 페이지에 필요한 청크들만 불러오도록하여 페이지를 더 빠르게 띄울 수 있게 된다.
+
+## Code Splitting 적용 
+
+Route 단위의 Code Splitting 을 적용해보자.   
+CRA 의 경우 이미 Code Splitting 을 적용 할 수 있도록 Webpack 설정이 잘되어있으므로 우리는 코드만 작성해주면된다.
+
+Suspense 와 React Lazy 를 이용한다.    
+동적으로 가져오므로 컴포넌트를 가져오기전에는 Suspense 의 fallback 을 이용하여 로딩 컴포넌트를 노출한다.
+
+```js
+import React, { lazy, Suspense } from 'react'
+import { Switch, Route } from 'react-router-dom'
+import './App.css'
+
+const ListPage = lazy(() => import('./pages/ListPage/index'))
+const ViewPage = lazy(() => import('./pages/ViewPage/index'))
+
+function App() {
+  return (
+    <div className="App">
+      <Suspense fallback={<div>Loading...</div>}>
+        <Switch>
+          <Route path="/" component={ListPage} exact />
+          <Route path="/view/:id" component={ViewPage} />
+        </Switch>
+      </Suspense>
+    </div>
+  )
+}
+
+export default App
+```
+
+그리고 다시 bundle-analyzer 를 실행해보자 
+
+![성능최적화 번들사이즈](/assets/images/post/성능최적화_번들사이즈/성능최적화_번들사이즈4.png)
+
+청크파일이 잘 쪼개진 것을 볼 수 있다.  
+그러면 실제 코드가 실행될 떄는 어떻게 불러올까 ?
+
+리스트페이지 진입시 청크 조각들을 불러오고 상세 페이지 진입시 추가로 청크를 불러온다.  
+
+![성능최적화 번들사이즈](/assets/images/post/성능최적화_번들사이즈/성능최적화_번들사이즈5.png)
+![성능최적화 번들사이즈](/assets/images/post/성능최적화_번들사이즈/성능최적화_번들사이즈6.png)
+
+Code Splitting 적용 후 performance 를 다시 측정해보면 js 용량이 줄어들면서 로드가 확 줄어든 것을 볼 수 있다.
+
+![성능최적화 번들사이즈](/assets/images/post/성능최적화_번들사이즈/성능최적화_번들사이즈7.png)
+
+
