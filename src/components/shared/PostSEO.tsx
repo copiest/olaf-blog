@@ -9,6 +9,7 @@ export interface Props {
 export default function PostSEO({ title, summary, thumbnail }: Props) {
   return (
     <Head>
+      <title>{title}</title>
       <meta name="subject" content={title} />
       <meta name="title" content={title} />
       <meta name="description" content={summary} />
