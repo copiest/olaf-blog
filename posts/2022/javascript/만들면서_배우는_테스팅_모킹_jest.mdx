@@ -1,0 +1,155 @@
+---
+title: 만들면서 배우는 테스트 - Mock (feat. Jest)
+tags:
+  - 테스트코드
+  - Mock
+  - Jest
+published: true
+date: '2022.02.04' 
+summary: 테스트코드를 생활화하자
+thumbnailImg: /assets/images/thumbnail/테스트.png
+---
+
+[이전의 포스트](/2022/javascript/만들면서_배우는_테스팅_모킹_몽키패치)에서 이어집니다.
+
+## 몽키패치를 이용한 테스트의 한계 
+
+몽키패치를 이용한 모킹은 간단하고 좋았지만 우리가 실제 테스트를 할 때 필요한 내부 구현체에 대한 동작 검증, 함수의 인자 대한 검증, 
+함수 호출 빈도와 호출 횟수 등에 대한 확인이 불가하다는 단점이 있다.  
+
+예를 들어 아래와 같은 코드를 보자 
+
+```js 
+// thumbWar.js 
+
+const utils = require('./utils')
+
+const numberTowin = 2
+
+function thumbWar(player1, player2) {
+    let player1Wins = 0 
+    let player2Wins = 0 
+
+    while(player1Wins < numberTowin && player2Wins < numberTowin) {
+        // 원래의 정상적인 코드
+        // const winnner = utils.getWinner(player1, player2)
+
+        // 임시로 player2 인자 값을 제거한 코드
+        const winnner = utils.getWinner(player1)
+
+        if (winnner === player1) {
+            player1Wins += 1
+        } else if (winnner === player2) {
+            player2Wins += 1 
+        }
+    }
+
+    return player1Wins > player2Wins ? player1 : player2
+}
+
+module.exports = thumbWar
+```
+
+몽키패치된 테스트 함수에서는 getWinner 의 구현체 상태와 상관없이 테스트는 항상 통과된다.
+
+```js
+const assert = require('assert')
+const thumbWar = require('./thumbwar')
+const utils = require('./utils')
+
+utils.getWinner = (p1, p2) => p1 // 몽키패치
+
+const winner = thumbWar('홍길동', '홍길자')
+
+// 실제 구현체 여부와 상관없이 항상 성공하는 테스트 케이스
+assert.strictEqual(winner, '홍길동') 
+```
+
+## Jest 를 이용한 Mock
+
+jest 설정에 대한 부분은 따로 다루지 않는다. [공식문서](https://jestjs.io/docs/getting-started) 을 참고하여 설정하길 바란다.   
+Jest Mock Function 을 이용하면 몽키패치 테스트에서 발견한 단점을 보완 할 수 있다.
+
+- jest.fn = jest mock function 
+- toHaveBeenCalledTimes = 함수가 몇 번 호출되었는지
+- toHaveBeenCalledWith = 인자 값 검증
+
+```js
+const assert = require('assert')
+const thumbWar = require('./thumbwar')
+const utils = require('./utils')
+
+test('thumbWar 테스트', () => {
+    const originalGetWinner = utils.getWinner
+
+    utils.getWinner = jest.fn((p1, p2) => p1)
+  
+    const winner = thumbWar('홍길동', '홍길자')
+
+    expect(winner).toBe('홍길동')
+    
+    // utils.getWinner 함수가 몇 번 호출되었는지 
+    expect(utils.getWinner).toHaveBeenCalledTimes(2)
+
+    // 호출시 인자 값을 어떤 것이었는지 
+    expect(utils.getWinner).toHaveBeenCalledWith('홍길동', '홍길자')
+
+    // 테스트 후 리셋
+    utils.getWinner = originalGetWinner
+  })
+```
+
+몽키패치에서는 검증이 불가했던 구현체에 대한 검증도 가능하다.
+
+![구현체검증](/assets/images/post/만들면서_배우는_테스트/목1.png)
+
+## 몽키패칭 보완하기
+
+jest.fn 과 같은 mock 유틸 함수를 추가하여 몽키패칭 단점을 보완해보자.    
+mock 함수 매 호출시마다 호출된 인자 값을 저장하도록한다.  
+
+```js
+function fn(impl) {
+    const mockFn = (...args) => {
+        mockFn.mock.calls.push(args)
+        
+        return impl(...args)
+    }
+
+    // 호출된 인자 값을 저장한다.
+    mockFn.mock = { calls: [] }
+    return mockFn
+}
+
+module.exports = fn
+```
+
+직접 구현한 mock 함수를 적용해보자.   
+호출시 인자 값을 내부에 저장하고 있으므로 내부 구현체 변경에 따른 추적도 가능해진다.
+
+```js 
+const fn = require('./fn')
+const assert = require('assert')
+const thumbWar = require('./thumbwar')
+const utils = require('./utils')
+
+const originalGetWinner = utils.getWinner
+
+utils.getWinner = fn((p1, p2) => p1)
+
+const winner = thumbWar('홍길동', '홍길자')
+
+assert.strictEqual(winner, '홍길동')
+
+// 호출시 인자 값 검증
+assert.deepStrictEqual(utils.getWinner.mock.calls, 
+    [ [ '홍길동', '홍길자' ], [ '홍길동', '홍길자' ] ]
+)
+
+// 리셋
+utils.getWinner = originalGetWinner;
+```
+
+✅ 호출 인자 값 검증 
+
+![몽키패칭보완](/assets/images/post/만들면서_배우는_테스트/목2.png)
