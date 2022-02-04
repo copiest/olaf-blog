@@ -1,0 +1,112 @@
+---
+title: 만들면서 배우는 테스팅 입문 
+tags:
+  - 테스트코드
+  - 자바스크립트
+published: true
+date: '2022.02.04' 
+summary: 테스트코드를 생활화하자
+thumbnailImg: /assets/images/thumbnail/테스트.png
+---
+
+## 테스팅 함수 
+
+toBe 테스팅 함수를 만들어보려한다.   
+toBe 는 기대 값을 받아 계산된 결과 값과 비교해주는 함수이다. 
+    
+인터페이스 
+```js
+expect(계산값).toBe(기대값)
+```
+
+구현 코드 
+    
+```js
+function expect(actual) {
+  return {
+    toBe(expected) {
+      if (actual !== expected) {
+        throw new Error(`${actual} is not equal to ${expected}`)
+      }
+    }
+  }
+}
+```
+
+사용 예시 
+   
+```js
+// 사용 예시
+const sum = (a, b) => a + b
+
+expect(sum(3, 7)).toBe(10) 
+expect(sum(3, 7)).toBe(20) // 10 is not equal to 20
+```
+
+toEqual, toBeGreaterThan 과 같은 테스팅 함수들도 비슷한 형태로 만들 수 있다.
+
+## test 
+
+test 함수는 테스트할 작업의 이름과 작업에서 실행 될 테스트를 받는다.
+
+```js
+test(title, callback)
+```
+
+구현 코드 
+
+```js
+function test(title, callback) {
+  try {
+    callback()
+    console.log(`✅ ${title}`)
+  } catch (error) {
+    console.error(`❌ ${title}`)
+    console.error(error)
+  }
+}
+```
+
+사용 예시 
+
+```js
+test('sum', () => {
+  expect(sum(10, 3)).toBe(13)
+})
+  
+// ✅ sum 테스트
+```
+
+## Setup Globals
+
+--require 명령를 미리 모듈을 로드하여 사용 할 수 있다.
+
+```js
+// setup-globals.js 
+
+const test = require('./test')
+const expect = require('./expect')
+
+global.expect = expect;
+global.test = test;
+```
+
+테스트 파일 
+
+```js
+// some-test.js 
+
+test('test1', () => { // testing... })
+test('test2', () => { // testing... })
+``` 
+
+실행 
+
+```js
+node --require ./setup-globals.js some-test.js
+```
+
+위의 예시들을 확장하여 다양한 테스팅 함수들을 구현 할 수 있다.  
+테스트 코드를 생활화하자.
+
+
