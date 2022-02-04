@@ -7,12 +7,14 @@ import { Post } from '$types/post'
 import { getAllPosts } from '$utils/posts'
 import Posts from '$home/Posts'
 import Navbar from '$shared/Navbar'
+import Seo from '$shared/SEO'
 
 const cx = classnames.bind(styles)
 
 function IndexPage({ posts = [] }: { posts: Post[] }) {
   return (
     <>
+      <Seo />
       <Navbar />
       <div className={cx('container')}>
         <Posts posts={posts} />

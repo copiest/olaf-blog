@@ -1,16 +1,21 @@
 import Head from 'next/head'
 
+import config from '../../config'
+
 export interface Props {
   title?: string
   summary?: string
   thumbnail?: string
 }
 
-export default function PostSEO({ title, summary, thumbnail }: Props) {
+export default function SEO({
+  title = config.title,
+  summary = config.summary,
+  thumbnail = config.thumbnail,
+}: Props) {
   return (
     <Head>
       <title>{title}</title>
-      <meta name="subject" content={title} />
       <meta name="title" content={title} />
       <meta name="description" content={summary} />
       <meta name="keywords" content={title} />
@@ -18,7 +23,6 @@ export default function PostSEO({ title, summary, thumbnail }: Props) {
       <meta property="og:description" content={summary} />
       <meta property="og:title" content={title} />
       <meta property="og:type" content="website" />
-      {typeof window !== 'undefined' && <meta property="og:url" content={window.location.href} />}
     </Head>
   )
 }

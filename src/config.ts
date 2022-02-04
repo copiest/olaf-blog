@@ -1,7 +1,7 @@
 export default {
   author: 'olaf',
-  title: 'dev.olaf',
-  summary: '떡볶이와 여행을 좋아하는 FE 개발자입니다.',
+  title: '고석진',
+  summary: '혼자 주저리 주저리 떠드는 공간',
   thumbnail: '/assets/images/thumbnail/main.png',
   url: 'https://olaf-blog.vercel.app', // TODO 변경예정
   link: {

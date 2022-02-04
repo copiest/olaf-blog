@@ -1,6 +1,6 @@
 import { Post, Slug } from '$types/post'
 import { getAllPosts, getPost } from '$utils/posts'
-import PostSEO from '$components/shared/PostSEO'
+import Seo from '$components/shared/SEO'
 import Header from '$components/post/Header'
 import Content from '$components/post/Content'
 import Navbar from '$shared/Navbar'
@@ -14,7 +14,7 @@ function PostDetail({ post, code, morePosts }: { post: Post; code: string; moreP
   return (
     <>
       <Navbar showProgressBar={true} />
-      <PostSEO title={title} summary={summary} thumbnail={thumbnailImg} />
+      <Seo title={title} summary={summary} thumbnail={thumbnailImg} />
       <Header title={title} thumbnailImg={thumbnailImg || 'fallback'} date={date} />
       <Content code={code} date={date} title={title} />
       <Footer morePosts={morePosts} />
