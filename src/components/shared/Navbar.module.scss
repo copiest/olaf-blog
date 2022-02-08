@@ -10,16 +10,50 @@
     background-color: transparent;
     display: flex;
     align-items: center;
-    padding: $container_side_padding;
+    padding: 7px 24px;
     transition: background-color .2s ease;
+
+    .inner-container {
+        max-width: 1100px;
+        width: 100%;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .wrap-left {
+            display: flex;
+    
+            img {
+                width: 45px;
+                height: 45px;
+                border-radius: 50%;
+            }    
+    
+            .wrap-txt {
+                display: flex;
+                align-items: center;
+                margin-left: 10px;
+                font-weight: 300;
+                color: var(--adaptiveGrey700);
+                
+                .txt-emphasize {
+                    margin-left: 3px;
+                    font-weight: bold;
+                    color: var(--adaptiveGrey800);
+                }
+            }
+        }
+
+        .txt-right-menu {
+            font-weight: 500;
+            color: var(--adaptiveGrey800);
+        }
+    }
 
     &.scrolled {
         background-color: var(--bodyBackgroundColor);
         border-bottom-color: rgba(0,27,55,0.1);
-    }
-
-    img {
-        width: 45px;
     }
 
     .progress-bar {
