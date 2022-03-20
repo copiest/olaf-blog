@@ -8,21 +8,17 @@ summary: 폰트 최적화를 이용해 폰트 로딩을 조금 더 빠르게
 thumbnailImg: /assets/images/thumbnail/테스트.png
 ---
 
-## 폰트 적용 시점
-
+## font-display 를 이용하여 폰트 적용 시점을 조절해보기 
+<br/><br/>
 ### FOUT (Flash of Unstyled Text)
 
-기본 폰트 텍스트를 노출하고 폰트를 다운 받은 후 적용 
-
-- IE, Edge 
+기본 폰트 텍스트를 노출하고 폰트를 다운 받은 후 적용 (IE, Edge)
 
 ### FOIT (Flash of Invisible Text)
 
-폰트를 다운 받은 후 적용된 폰트 텍스트 노출
+폰트를 다운 받은 후 적용된 폰트 텍스트 노출 (Chrome, Safari)
 
-- Chrome, Safari
-
-## font-display 
+### font-display 
 
 css font-display 를 사용하여 폰트 적용 방식을 선택 할 수 있다
 
@@ -32,13 +28,13 @@ css font-display 를 사용하여 폰트 적용 방식을 선택 할 수 있다
 }
 ```
 
-1. auto: 브라우저 기본 적용 방식을 따른다
-2. block (FOIT timeout = 3s)
-3. swap (FOUT)
-4. fallback (FOIT timeout = 0.1s): 3초 후에도 불러오지 못했을 시, 기본 폰트로 유지, 이후 캐시
-5. optional (FOIT timeout = 1s): 이후 네트워크 상황에 따라, 기본 폰트로 유지할지 웹폰트로 적용할지 결정, 이후 캐시 
+- auto: 브라우저 기본 적용 방식을 따른다
+- block (FOIT timeout = 3s)
+- swap (FOUT)
+- fallback (FOIT timeout = 0.1s): 3초 후에도 불러오지 못했을 시, 기본 폰트로 유지, 이후 캐시
+- optional (FOIT timeout = 1s): 이후 네트워크 상황에 따라, 기본 폰트로 유지할지 웹폰트로 적용할지 결정, 이후 캐시 
 
-## fontface-observer 
+## TIP) FOIT 방식 좀 더 자연스럽게 써보기 
 
 FOIT 방식의 경우 폰트 다운로드 완료 시점에 텍스트가 노출되기 때문에 부자연스러운 부분이 있다.  
 이를 보완하고자 폰트 다운로드 완료시점 (노출시점)에 fade-in 애니메이션을 추가하여 자연스럽게 뜰 수 있도록 해보자.  
@@ -60,9 +56,7 @@ useEffect(() => {
 <div style={{ opacity: fontLoaded ? 1 : 0, transition: 'opacity 0.3s ease' }}>Text</div>
 ```
 
-## 폰트 사이즈 줄이기 
-
-### 폰트 포맷 변경 
+## 폰트 포맷을 변경하여 폰트 사이즈 줄이기 
 
 - TTF/OTF: PC 폰트
 - WOFF, WOFF2: 웹 전용 
@@ -118,5 +112,13 @@ Array.prototype.map.call('ABCDEF', c => 'u+' + ('0000' + c.charCodeAt(0).toStrin
 
 ## Preload
 
-TODO ...
+```html
+<link rel="preload" href="폰트url" as="font" type="font/woff2" crossorign />
+```
+
+Preload 적용전 (js 를 다운받고 font 리소스 다운)
+![폰트지원브라우저](/assets/images/post/폰트최적화/폰트최적화07.png)
+
+Preload 적용후 (font 리소스를 제일 먼저 다운)
+![폰트지원브라우저](/assets/images/post/폰트최적화/폰트최적화06.png)
 
